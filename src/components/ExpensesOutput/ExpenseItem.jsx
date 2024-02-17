@@ -1,4 +1,5 @@
 import { Pressable, View, Text } from "react-native";
+import { getFormattedDate } from "../../util/date";
 
 function ExpenseItem({ expense }) {
   return (
@@ -11,10 +12,14 @@ function ExpenseItem({ expense }) {
           <Text className="mb-1 text-base font-bold text-primary-50">
             {expense.description}
           </Text>
-          <Text className="text-primary-50">{expense.date.toString()}</Text>
+          <Text className="text-primary-50">
+            {getFormattedDate(expense.date)}
+          </Text>
         </View>
-        <View className="items-center justify-center rounded bg-white p-3 py-1">
-          <Text className="font-bold text-primary-500">{expense.amount}</Text>
+        <View className="min-w-[80px] items-center justify-center rounded bg-white p-3 py-1">
+          <Text className="font-bold text-primary-500">
+            {expense.amount.toFixed(2)}
+          </Text>
         </View>
       </View>
     </Pressable>
