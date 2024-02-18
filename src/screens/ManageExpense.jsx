@@ -2,6 +2,7 @@ import { useLayoutEffect } from "react";
 import { Text, View } from "react-native";
 
 import IconButton from "../components/ExpensesOutput/UI/IconButton";
+import CustomButton from "../components/ExpensesOutput/UI/CustomButton";
 import { GlobalStyles } from "../shared/constants";
 
 function ManageExpense({ route, navigation }) {
@@ -16,6 +17,18 @@ function ManageExpense({ route, navigation }) {
 
   return (
     <View className="flex-1 bg-primary-800 p-6">
+      <View className="flex-row items-center justify-center">
+        <CustomButton
+          mode={"flat"}
+          onPress={() => {}}
+          ViewClassName="min-w-[120px] mx-2"
+        >
+          Cancel
+        </CustomButton>
+        <CustomButton onPress={() => {}} ViewClassName="min-w-[120px] mx-2">
+          {isEditing ? "Update" : "Add"}
+        </CustomButton>
+      </View>
       {isEditing && (
         <View className="mt-4 items-center border-t-2 border-t-primary-200 pt-2">
           <IconButton
