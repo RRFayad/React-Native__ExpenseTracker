@@ -2,14 +2,14 @@ import { Pressable, View, Text } from "react-native";
 import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
 
-function ExpenseItem({ description, date, amount }) {
+function ExpenseItem({ id, description, date, amount }) {
   // Max brought it in different props
 
   const navigation = useNavigation();
 
   return (
     <Pressable
-      onPress={() => navigation.navigate("ManageExpense")}
+      onPress={() => navigation.navigate("ManageExpense", { id })}
       className="active:opacity-75"
     >
       <View
