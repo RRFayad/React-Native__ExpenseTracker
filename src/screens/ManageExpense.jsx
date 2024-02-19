@@ -15,12 +15,22 @@ function ManageExpense({ route, navigation }) {
     });
   }, [navigation, isEditing]);
 
+  const deleteExpenseHandler = () => {
+    navigation.goBack();
+  };
+  const cancelHandler = () => {
+    navigation.goBack();
+  };
+  const confirmHandler = () => {
+    navigation.goBack();
+  };
+
   return (
     <View className="flex-1 bg-primary-800 p-6">
       <View className="flex-row items-center justify-center">
         <CustomButton
           mode={"flat"}
-          onPress={() => {}}
+          onPress={cancelHandler}
           ViewClassName="min-w-[120px] mx-2"
         >
           Cancel
