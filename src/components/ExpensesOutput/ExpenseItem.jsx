@@ -24,7 +24,7 @@ function ExpenseItem({ id, description, date, amount }) {
         </View>
         <View className="min-w-[80px] items-center justify-center rounded bg-white p-3 py-1">
           <Text className="font-bold text-primary-500">
-            {amount.toFixed(2)}
+            ${amount.toFixed(2)}
           </Text>
         </View>
       </View>

@@ -1,13 +1,17 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { Text, View } from "react-native";
 
 import IconButton from "../components/ExpensesOutput/UI/IconButton";
 import CustomButton from "../components/ExpensesOutput/UI/CustomButton";
 import { GlobalStyles } from "../shared/constants";
+import ExpensesContext from "../shared/Context/ExpensesContext";
 
 function ManageExpense({ route, navigation }) {
   const expenseId = route.params?.id; // This will no throw an error, it will return undifined if there's no params
   const isEditing = !!expenseId;
+
+  const { addExpense, deleteExpense, updateExpense } =
+    useContext(ExpensesContext);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -15,7 +19,8 @@ function ManageExpense({ route, navigation }) {
     });
   }, [navigation, isEditing]);
 
-  const deleteExpenseHandler = () => {
+  const deleteExpenseHandler = (id) => {
+    deleteExpense(id);
     navigation.goBack();
   };
   const cancelHandler = () => {
@@ -35,7 +40,10 @@ function ManageExpense({ route, navigation }) {
         >
           Cancel
         </CustomButton>
-        <CustomButton onPress={() => {}} ViewClassName="min-w-[120px] mx-2">
+        <CustomButton
+          onPress={isEditing ? updateExpense : addExpense}
+          ViewClassName="min-w-[120px] mx-2"
+        >
           {isEditing ? "Update" : "Add"}
         </CustomButton>
       </View>
@@ -45,7 +53,7 @@ function ManageExpense({ route, navigation }) {
             icon={"trash"}
             color={GlobalStyles.colors.error500}
             size={36}
-            onPress={() => {}}
+            onPress={() => deleteExpenseHandler(expenseId)}
           />
         </View>
       )}

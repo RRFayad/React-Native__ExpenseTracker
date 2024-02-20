@@ -1,9 +1,12 @@
 import { View, Text, FlatList } from "react-native";
 
 function ExpensesSummary({ expenses, periodName }) {
-  const expensesSum = expenses.reduce((sum, expense) => {
-    return expense.amount + sum;
-  }, 0);
+  const expensesSum =
+    expenses.length === 0
+      ? 0
+      : expenses.reduce((sum, expense) => {
+          return expense.amount + sum;
+        }, 0);
 
   return (
     <View className="flex-row items-center justify-between rounded-md bg-primary-50 p-2">

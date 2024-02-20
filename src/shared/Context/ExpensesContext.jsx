@@ -12,9 +12,11 @@ const ExpensesContext = React.createContext({
 const expensesReducer = (state, action) => {
   switch (action.type) {
     case "ADD":
+      // console.log(action.type);
       const id = Date.now().toString();
       return [{ ...action.payload, id }, ...state];
     case "UPDATE":
+      // console.log(action.type);
       const toBeUpdatedExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id,
       );
@@ -28,6 +30,7 @@ const expensesReducer = (state, action) => {
       return newStateArr;
 
     case "DELETE":
+      console.log(action.type);
       return state.filter((expense) => expense.id !== action.payload);
     default:
       return state;
@@ -49,7 +52,6 @@ export function ExpensesContextProvider({ children }) {
 
   const deleteExpense = (id) => {
     dispatch({ type: "DELETE", payload: id });
-    navigation.goBack();
   };
 
   return (
