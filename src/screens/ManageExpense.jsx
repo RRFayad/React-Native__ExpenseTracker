@@ -1,10 +1,11 @@
 import { useContext, useLayoutEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, View, TextInput } from "react-native";
 
-import IconButton from "../components/ExpensesOutput/UI/IconButton";
-import CustomButton from "../components/ExpensesOutput/UI/CustomButton";
+import IconButton from "../components/UI/IconButton";
+import CustomButton from "../components/UI/CustomButton";
 import { GlobalStyles } from "../shared/constants";
 import ExpensesContext from "../shared/Context/ExpensesContext";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 function ManageExpense({ route, navigation }) {
   const expenseId = route.params?.id; // This will no throw an error, it will return undifined if there's no params
@@ -32,6 +33,7 @@ function ManageExpense({ route, navigation }) {
 
   return (
     <View className="flex-1 bg-primary-800 p-6">
+      <ExpenseForm />
       <View className="flex-row items-center justify-center">
         <CustomButton
           mode={"flat"}
