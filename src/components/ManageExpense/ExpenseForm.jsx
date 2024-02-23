@@ -1,19 +1,35 @@
 import { useState } from "react";
 import { View, TextInput, Text } from "react-native";
-import CustomInput from "./CustomInput";
 
-function ExpenseForm() {
+import CustomInput from "./CustomInput";
+import CustomButton from "../UI/CustomButton";
+
+function ExpenseForm({
+  onCancel: cancelHandler,
+  // onSubmit: submitHandler,
+  submitButtonLabel,
+  onSubmit,
+}) {
   const [inputValues, setInputValues] = useState({
     amount: "",
     date: "",
     description: "",
   });
 
+  const submitHandler = () => {
+    const expenseData = {
+      amount: +inputValues.amount, // + converts the string into a number
+      date: new Date(inputValues.date),
+      description: inputValues.description,
+    };
+
+    onSubmit(expenseData);
+  };
+
   const inputChangeHandler = (inputIdentifier, enteredText) => {
     setInputValues((prevState) => {
       return { ...prevState, [inputIdentifier]: enteredText };
     });
-    console.log(inputIdentifier, enteredText);
   };
 
   return (
@@ -53,6 +69,21 @@ function ExpenseForm() {
           value: inputValues.description,
         }}
       />
+      <View className="flex-row items-center justify-center">
+        <CustomButton
+          mode={"flat"}
+          onPress={cancelHandler}
+          ViewClassName="min-w-[120px] mx-2"
+        >
+          Cancel
+        </CustomButton>
+        <CustomButton
+          onPress={submitHandler}
+          ViewClassName="min-w-[120px] mx-2"
+        >
+          {submitButtonLabel}
+        </CustomButton>
+      </View>
     </View>
   );
 }

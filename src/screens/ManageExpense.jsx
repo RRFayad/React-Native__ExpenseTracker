@@ -27,28 +27,19 @@ function ManageExpense({ route, navigation }) {
   const cancelHandler = () => {
     navigation.goBack();
   };
-  const confirmHandler = () => {
+  const confirmHandler = (expenseData) => {
+    isEditing ? updateExpense(expenseId, expenseData) : addExpense(expenseData);
     navigation.goBack();
   };
 
   return (
     <View className="flex-1 bg-primary-800 p-6">
-      <ExpenseForm />
-      <View className="flex-row items-center justify-center">
-        <CustomButton
-          mode={"flat"}
-          onPress={cancelHandler}
-          ViewClassName="min-w-[120px] mx-2"
-        >
-          Cancel
-        </CustomButton>
-        <CustomButton
-          onPress={isEditing ? updateExpense : addExpense}
-          ViewClassName="min-w-[120px] mx-2"
-        >
-          {isEditing ? "Update" : "Add"}
-        </CustomButton>
-      </View>
+      <ExpenseForm
+        submitButtonLabel={isEditing ? "Update" : "Add"}
+        onCancel={cancelHandler}
+        onSubmit={confirmHandler}
+      />
+
       {isEditing && (
         <View className="mt-4 items-center border-t-2 border-t-primary-200 pt-2">
           <IconButton
