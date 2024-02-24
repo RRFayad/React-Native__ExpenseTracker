@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput, Text, Alert } from "react-native";
 
 import CustomInput from "./CustomInput";
 import CustomButton from "../UI/CustomButton";
@@ -12,27 +12,61 @@ function ExpenseForm({
   onSubmit,
   defaultValues,
 }) {
-  const [inputValues, setInputValues] = useState({
-    amount: defaultValues ? defaultValues.amount.toString() : "",
-    date: defaultValues ? getFormattedDate(defaultValues.date) : "",
-    description: defaultValues ? defaultValues.description : "",
+  const [inputs, setInputs] = useState({
+    amount: {
+      value: defaultValues ? defaultValues.amount.toString() : "",
+      isValid: true, // It's just a hack, as we didn't want to set if the form is touched
+    },
+    date: {
+      value: defaultValues ? getFormattedDate(defaultValues.date) : "",
+      isValid: true, // It's just a hack, as we didn't want to set if the form is touched
+    },
+    description: {
+      value: defaultValues ? defaultValues.description : "",
+      isValid: true, // It's just a hack, as we didn't want to set if the form is touched
+    },
   });
 
   const submitHandler = () => {
     const expenseData = {
-      amount: +inputValues.amount, // + converts the string into a number
-      date: new Date(inputValues.date),
-      description: inputValues.description,
+      amount: +inputs.amount.value, // + converts the string into a number
+      date: new Date(inputs.date.value),
+      description: inputs.description.value,
     };
+
+    const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
+    const dateIsValid = expenseData.date.toString() !== "Invalid Date";
+    const descriptionIsValid = expenseData.description.trim().length > 0;
+
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+      console.log(expenseData.amount);
+      setInputs((curInputs) => {
+        return {
+          amount: { value: curInputs.amount.value, isValid: amountIsValid },
+          date: { value: curInputs.date.value, isValid: dateIsValid },
+          description: {
+            value: curInputs.description.value,
+            isValid: descriptionIsValid,
+          },
+        };
+      });
+      return;
+    }
 
     onSubmit(expenseData);
   };
 
   const inputChangeHandler = (inputIdentifier, enteredText) => {
-    setInputValues((prevState) => {
-      return { ...prevState, [inputIdentifier]: enteredText };
+    setInputs((prevState) => {
+      return {
+        ...prevState,
+        [inputIdentifier]: { value: enteredText, isValid: true },
+      };
     });
   };
+
+  const formIsValid =
+    inputs.amount.isValid && inputs.date.isValid && inputs.description.isValid;
 
   return (
     <View className="mt-4">
@@ -46,9 +80,10 @@ function ExpenseForm({
             keyboardType: "decimal-pad",
             onChangeText: (enteredText) =>
               inputChangeHandler("amount", enteredText), // onChangeText gives the text as the arg for the handler fn (so we don't need to pass it)
-            value: inputValues.amount,
+            value: inputs.amount.value,
           }}
           containerClassName={"flex-1"}
+          invalid={!inputs.amount.isValid}
         />
         <CustomInput
           label={"Date"}
@@ -57,9 +92,10 @@ function ExpenseForm({
             maxLength: 10,
             onChangeText: (enteredText) =>
               inputChangeHandler("date", enteredText), // onChangeText gives the text as the arg for the handler fn (so we don't need to pass it)
-            value: inputValues.date,
+            value: inputs.date.value,
           }}
           containerClassName={"flex-1"}
+          invalid={!inputs.date.isValid}
         />
       </View>
       <CustomInput
@@ -68,9 +104,15 @@ function ExpenseForm({
           multiline: true,
           onChangeText: (enteredText) =>
             inputChangeHandler("description", enteredText), // onChangeText gives the text as the arg for the handler fn (so we don't need to pass it)
-          value: inputValues.description,
+          value: inputs.description.value,
         }}
+        invalid={!inputs.description.isValid}
       />
+      {!formIsValid && (
+        <Text className="my-4 text-center  font-bold text-error-500">
+          Invalid Inputs Values
+        </Text>
+      )}
       <View className="flex-row items-center justify-center">
         <CustomButton
           mode={"flat"}
