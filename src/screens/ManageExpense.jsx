@@ -2,17 +2,18 @@ import { useContext, useLayoutEffect } from "react";
 import { Text, View, TextInput } from "react-native";
 
 import IconButton from "../components/UI/IconButton";
-import CustomButton from "../components/UI/CustomButton";
 import { GlobalStyles } from "../shared/constants";
 import ExpensesContext from "../shared/Context/ExpensesContext";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 function ManageExpense({ route, navigation }) {
+  const { addExpense, deleteExpense, updateExpense, expenses } =
+    useContext(ExpensesContext);
+
   const expenseId = route.params?.id; // This will no throw an error, it will return undifined if there's no params
   const isEditing = !!expenseId;
 
-  const { addExpense, deleteExpense, updateExpense } =
-    useContext(ExpensesContext);
+  const expense = expenses.find((expense) => expense.id === expenseId);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,6 +39,7 @@ function ManageExpense({ route, navigation }) {
         submitButtonLabel={isEditing ? "Update" : "Add"}
         onCancel={cancelHandler}
         onSubmit={confirmHandler}
+        defaultValues={expense}
       />
 
       {isEditing && (
